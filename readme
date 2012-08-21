@@ -1,0 +1,45 @@
+
+Training images require 2 type of samples:
+positive samples
+negative samples
+
+positive samples contain images with required sign and negative samples contain images without required sign.
+Around 300-400 positive and 500-600 negative samples are required for descent training. More the samples better is performance.
+
+Follow the steps for training:
+*Install [http://opencv.willowgarage.com/wiki/ opencv]
+*Use objectmarker program to set region of interests in each positive image and create info.txt.
+This file is used to mark objects for training images.
+Put positive samples in folder 'positive' all the images should be in .bmp format and file name should be like '1.bmp', '2.bmp' etc.
+After running this program each images will pop up. Select region of interest using mouse (creating rectagle while left click pressed) 
+use 'space' to add this data to file and 'enter' to save this data and load next file. Press 'escape' exit.
+'info.txt' file will be generated which can be used to create samples for training.
+
+*Directory Structure
+Directories will look like following:
+
+/positive
+  1.bmp
+  2.bmp
+positive.info
+
+/negative
+  1.bmp
+  2.bmp
+negative.txt
+
+positive.info will look like
+  positive/1.bmp 1  140 100 45 45
+  positive/2.bmp 1  100 200 50 50
+
+*Use opencv-createsamples utility for generating positive vec file.
+use following command to generate positive.vec file
+
+''opencv-createsamples -info positive.txt -vec positive.vec -w 30 -h 30''
+
+*Use opencv-trainincascade for training samples.
+use following command to start training 
+
+''opencv_traincascade -data <sing name> -vec positive.vec -bg negative.txt -numPos <number of positive samples> -numNeg <number of negative samples> -w 30 -h 30 -mode ALL''
+
+It will generate .xml file which can be used to plugins mentioned above. Training process can take more than 5-6 hour depending on processesing power of the system.
